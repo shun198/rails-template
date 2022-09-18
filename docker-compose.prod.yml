@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: mysql
+    build:
+      context: .
+      dockerfile: containers/mysql/Dockerfile
+    # M1チップでも動くように
+    platform: linux/x86_64
+    # ローカルの/data/dbをコンテナの/var/lib/mysqlにマウンティング
+    volumes:
+      - db_data:/var/lib/mysql
+    # 環境変数
+    env_file:
+      - .env
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: containers/rails/Dockerfile
+    volumes:
+      - .:/code
+      - ./static:/static
+    expose:
+      - "3000"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0' && rake db:create"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      # db:
+      #   condition: service_healthy
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: containers/nginx/Dockerfile
+    volumes:
+      - ./static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+volumes:
+  db_data:
+  static:
