@@ -37,8 +37,6 @@ services:
     build:
       context: .
       dockerfile: containers/nginx/Dockerfile
-    volumes:
-      - ./static:/static
     ports:
       - "80:80"
     depends_on:

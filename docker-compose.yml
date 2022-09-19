@@ -23,12 +23,12 @@ services:
       dockerfile: containers/rails/Dockerfile
     volumes:
       - .:/code
-      - ./static:/static
+      - bundle:/usr/local/bundle
     ports:
       - "3000:3000"
       # デバッグ用ポート
       - "3030:3030"
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000"
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     env_file:
       - ./.env
     depends_on:
@@ -36,3 +36,4 @@ services:
         condition: service_healthy
 volumes:
   db_data:
+  bundle:
