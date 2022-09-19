@@ -9,4 +9,4 @@ WORKDIR /code
 ADD Gemfile /code/Gemfile
 ADD Gemfile.lock /code/Gemfile.lock
 RUN bundle install
-ADD . /code/
+COPY . /code/
