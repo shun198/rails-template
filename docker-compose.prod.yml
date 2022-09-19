@@ -23,7 +23,7 @@ services:
       dockerfile: containers/rails/Dockerfile
     volumes:
       - .:/code
-      - ./static:/static
+      - bundle:/usr/local/bundle
     expose:
       - "3000"
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
@@ -43,3 +43,4 @@ services:
       - app
 volumes:
   db_data:
+  bundle:
