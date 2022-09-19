@@ -6,7 +6,7 @@ RUN apt-get update -qq && \
     apt-get update -qq && apt-get install -y nodejs yarn
 RUN mkdir /code
 WORKDIR /code
-ADD Gemfile /code/Gemfile
-ADD Gemfile.lock /code/Gemfile.lock
+COPY Gemfile /code/Gemfile
+COPY Gemfile.lock /code/Gemfile.lock
 RUN bundle install
 COPY . /code/
